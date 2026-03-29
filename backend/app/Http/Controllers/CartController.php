@@ -6,177 +6,152 @@ use Illuminate\Http\Request;
 use App\Models\Cart;
 use App\Models\CartItem;
 use Illuminate\Support\Facades\DB;
+
 class CartController extends Controller
 {
-    // Lấy giỏ hàng
-    public function index()
+    // =========================
+    // LẤY GIỎ HÀNG
+    // =========================
+    public function index($user_id)
 {
-    $user_id = auth()->id();
-
     $cart = Cart::where('user_id', $user_id)->first();
 
-    if (!$cart) {
-        return response()->json([]);
-    }
+    if (!$cart) return response()->json([]);
 
-    $items = CartItem::join('products', 'cart_items.product_id', '=', 'products.product_id')
+    $items = DB::table('cart_items')
+        ->join('product_variants', 'cart_items.variant_id', '=', 'product_variants.variant_id')
+        ->join('products', 'product_variants.product_id', '=', 'products.product_id')
         ->where('cart_items.cart_id', $cart->cart_id)
         ->select(
             'cart_items.cart_item_id',
-            'products.product_id',
             'products.name',
-            'products.price',
-            'cart_items.quantity'
+            'product_variants.color',
+            'product_variants.storage',
+            'product_variants.price',
+            'product_variants.image_url',
+            'cart_items.quantity',
+            DB::raw('product_variants.price * cart_items.quantity as total')
         )
         ->get();
 
-    // tính tổng tiền cho từng sản phẩm
-    foreach ($items as $item) {
-        $item->total = $item->price * $item->quantity;
-    }
-
     return response()->json($items);
 }
-
-    // Thêm vào giỏ hàng
+    // =========================
+    // THÊM VÀO GIỎ HÀNG
+    // =========================
     public function add(Request $request)
     {
-        $user_id = auth()->id();
+        $user_id = 1; // test user 1
 
-        // tìm cart
-        $cart = Cart::where('user_id', $user_id)->first();
+        $cart = Cart::firstOrCreate([
+            'user_id' => $user_id
+        ]);
 
-        // nếu chưa có thì tạo
-        if (!$cart) {
-            $cart = Cart::create([
-                'user_id' => $user_id
-            ]);
-        }
-
-        // kiểm tra sản phẩm đã có chưa
         $item = CartItem::where('cart_id', $cart->cart_id)
-                        ->where('product_id', $request->product_id)
-                        ->first();
+            ->where('variant_id', $request->variant_id)
+            ->first();
 
         if ($item) {
-            // tăng số lượng
             $item->quantity += $request->quantity;
             $item->save();
         } else {
-            // thêm mới
-            $item = CartItem::create([
+            CartItem::create([
                 'cart_id' => $cart->cart_id,
-                'product_id' => $request->product_id,
+                'variant_id' => $request->variant_id,
                 'quantity' => $request->quantity
             ]);
         }
 
         return response()->json([
-            'message' => 'Added to cart',
-            'item' => $item
+            'message' => 'Added to cart'
         ]);
     }
 
-    // Xóa sản phẩm khỏi giỏ
+    // =========================
+    // TĂNG GIẢM SỐ LƯỢNG
+    // =========================
+    public function updateQuantity(Request $request)
+    {
+        $item = CartItem::where('cart_item_id', $request->cart_item_id)->first();
+
+        if (!$item) return response()->json(['message' => 'Item not found']);
+
+        $item->quantity = $request->quantity;
+        $item->save();
+
+        return response()->json(['message' => 'Quantity updated']);
+    }
+
+    // =========================
+    // XÓA SẢN PHẨM
+    // =========================
     public function remove($id)
     {
-        $user_id = auth()->id();
-
         $item = CartItem::find($id);
 
-        if (!$item) {
-            return response()->json([
-                'message' => 'Item not found'
-            ]);
-        }
-
-        $cart = Cart::where('user_id', $user_id)->first();
-
-        if (!$cart || $item->cart_id != $cart->cart_id) {
-            return response()->json([
-                'message' => 'Unauthorized'
-            ]);
-        }
+        if (!$item) return response()->json(['message' => 'Item not found']);
 
         $item->delete();
 
-        return response()->json([
-            'message' => 'Item removed'
+        return response()->json(['message' => 'Item removed']);
+    }
+
+    // =========================
+    // CHECKOUT
+    // =========================
+    public function checkout()
+    {
+        $user_id = 1; // test user 1
+
+        $cart = Cart::where('user_id', $user_id)->first();
+        if (!$cart) return response()->json(['message' => 'Cart empty']);
+
+        $items = CartItem::where('cart_id', $cart->cart_id)->get();
+        if ($items->count() == 0) return response()->json(['message' => 'Cart empty']);
+
+        $total = 0;
+
+        foreach ($items as $item) {
+            $variant = DB::table('product_variants')
+                ->where('variant_id', $item->variant_id)
+                ->first();
+
+            if ($variant) {
+                $total += $variant->price * $item->quantity;
+            }
+        }
+
+        // tạo order
+        $order_id = DB::table('orders')->insertGetId([
+            'user_id' => $user_id,
+            'total_price' => $total,
+            'created_at' => now()
         ]);
-    }
-    public function updateQuantity(Request $request)
-{
-    $item = CartItem::where('cart_item_id', $request->cart_item_id)->first();
 
-    if (!$item) {
+        // thêm order items
+        foreach ($items as $item) {
+
+            $variant = DB::table('product_variants')
+                ->where('variant_id', $item->variant_id)
+                ->first();
+
+            if ($variant) {
+                DB::table('order_items')->insert([
+                    'order_id' => $order_id,
+                    'variant_id' => $item->variant_id,
+                    'price' => $variant->price,
+                    'quantity' => $item->quantity
+                ]);
+            }
+        }
+
+        // xoá cart
+        CartItem::where('cart_id', $cart->cart_id)->delete();
+
         return response()->json([
-            'message' => 'Item not found'
-        ]);
-    }
-
-    // cập nhật số lượng mới
-    $item->quantity = $request->quantity;
-    $item->save();
-
-    return response()->json([
-        'message' => 'Quantity updated',
-        'item' => $item
-    ]);
-}
-public function checkout()
-{
-    $user_id = auth()->id();
-
-    $cart = Cart::where('user_id', $user_id)->first();
-
-    if (!$cart) {
-        return response()->json([
-            'message' => 'Cart is empty'
-        ]);
-    }
-
-    $items = CartItem::where('cart_id', $cart->cart_id)->get();
-
-    if ($items->count() == 0) {
-        return response()->json([
-            'message' => 'Cart is empty'
-        ]);
-    }
-
-    // tính tổng tiền
-    $total = 0;
-
-    foreach ($items as $item) {
-        $product = DB::table('products')->where('product_id', $item->product_id)->first();
-        $total += $product->price * $item->quantity;
-    }
-
-    // tạo order
-    $order_id = DB::table('orders')->insertGetId([
-        'user_id' => $user_id,
-        'total_price' => $total,
-        'created_at' => now()
-    ]);
-
-    // thêm order items
-    foreach ($items as $item) {
-        $product = DB::table('products')->where('product_id', $item->product_id)->first();
-
-        DB::table('order_items')->insert([
+            'message' => 'Order success',
             'order_id' => $order_id,
-            'product_id' => $item->product_id,
-            'price' => $product->price,
-            'quantity' => $item->quantity
+            'total_price' => $total
         ]);
     }
-
-    // xóa giỏ hàng
-    CartItem::where('cart_id', $cart->cart_id)->delete();
-
-    return response()->json([
-        'message' => 'Order created successfully',
-        'order_id' => $order_id,
-        'total_price' => $total
-    ]);
-}
 }

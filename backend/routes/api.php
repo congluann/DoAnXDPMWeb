@@ -47,12 +47,13 @@ Route::get('/product-images/{id}', [ProductController::class, 'getImages']);
 use App\Http\Controllers\CartController;
 
 Route::prefix('cart')->group(function () {
-    Route::get('/{user_id}', [CartController::class, 'index']);
+
+    Route::get('/{user_id}', [CartController::class, 'index']);   // ✅ đúng
     Route::post('/add', [CartController::class, 'add']);
     Route::delete('/{id}', [CartController::class, 'remove']);
     Route::put('/update', [CartController::class, 'updateQuantity']);
-    Route::post('/checkout', [CartController::class, 'checkout']);   // thêm dòng này
-    
+    Route::post('/checkout', [CartController::class, 'checkout']);
+
 });
 
 
