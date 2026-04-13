@@ -32,21 +32,43 @@ import { Link } from "react-router-dom";
       />
     )}
 
-    <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center" }}>
+    {/* <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center" }}>
       {products.map((product) => (
 
         <div
           key={product.product_id}
           style={{
-            width: 260,
+             width: "calc(25% - 30px)",
+margin: "15px",
             border: "1px solid #ddd",
             borderRadius: 10,
-            margin: 15,
+            
             padding: 15,
             textAlign: "center",
             boxShadow: "0 4px 10px rgba(0,0,0,0.1)"
           }}
-        >
+        > */}
+          <div
+  style={{
+    display: "flex",
+    flexWrap: "wrap",
+    gap: "20px",
+    justifyContent: "flex-start",
+  }}
+>
+  {products.map((product) => (
+    <div
+      key={product.product_id}
+      style={{
+        width: "22%",
+        border: "1px solid #ddd",
+        borderRadius: 10,
+        padding: 15,
+        textAlign: "center",
+        boxShadow: "0 4px 10px rgba(0,0,0,0.1)",
+        boxSizing: "border-box",
+      }}
+    >
 
           {/* CLICK VÀO ẢNH + TÊN → sang trang chi tiết */}
           <Link
@@ -57,7 +79,7 @@ import { Link } from "react-router-dom";
             <img
               src={`http://localhost:8000/${product.image_url}`}
               alt={product.name}
-              style={{ width: "100%", height: 200, objectFit: "cover", cursor: "pointer" }}
+              style={{ width: "100%", height: 250, objectFit: "cover", cursor: "pointer" }}
             />
 
             <h3 style={{ marginTop: 10 }}>{product.name}</h3>

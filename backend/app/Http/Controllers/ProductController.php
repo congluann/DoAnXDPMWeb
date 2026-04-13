@@ -19,7 +19,7 @@ class ProductController extends Controller
 }
 public function show($id)
 {
-    $product = Product::with([
+    $product = Product::with([  
         'images',
         'variants',
         'specifications'
