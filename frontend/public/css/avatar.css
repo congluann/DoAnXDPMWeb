@@ -1,0 +1,129 @@
+.avatar-row {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    flex-wrap: wrap;
+}
+
+.avatar {
+    position: relative;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    overflow: hidden;
+    background: #e5e7eb;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.avatar.small {
+    width: 40px;
+    height: 40px;
+}
+
+.avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.fallback {
+    position: absolute;
+    font-weight: bold;
+    color: #374151;
+}
+
+.badge {
+    position: absolute;
+    bottom: 4px;
+    right: 4px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 2px solid white;
+}
+
+.badge.online {
+    background: #16a34a;
+}
+
+.avatar-group {
+    display: flex;
+    align-items: center;
+}
+
+.avatar-group .avatar {
+    margin-left: -12px;
+    border: 2px solid white;
+}
+
+.avatar-count {
+    margin-left: -12px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #d1d5db;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
+
+.grayscale img {
+    filter: grayscale(100%);
+}
+.carousel {
+    position: relative;
+    width: 12rem;
+    max-width: 100%;
+    margin: 40px auto;
+    overflow: hidden;
+}
+
+.carousel-track {
+    display: flex;
+    transition: transform 0.4s ease;
+}
+
+.carousel-item {
+    min-width: 100%;
+    padding: 4px;
+}
+
+.card {
+    background: #f9fafb;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.card-content {
+    aspect-ratio: 1 / 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    font-weight: 600;
+}
+
+.carousel-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: white;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    padding: 6px 10px;
+    border-radius: 50%;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+.carousel-btn.prev {
+    left: -12px;
+}
+
+.carousel-btn.next {
+    right: -12px;
+}
+

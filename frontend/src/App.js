@@ -1,4 +1,3 @@
-// src/App.js
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
@@ -8,21 +7,30 @@ import Orders from "./pages/Orders";
 import OrderDetail from "./pages/OrderDetail";
 import ProductDetail from "./pages/ProductDetail";
 
+import AdminLayout from "./pages/AdminLayout";
+import AdminCategory from "./pages/AdminCategory";
+import AdminProduct from "./pages/AdminProduct";
+
 
 function App() {
   return (
     <Router>
-      <div style={{ padding: 20 }}>
-        <h1>Phone Store</h1>
+      <Routes>
 
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/cart" element={<Cart />} />
-          <Route path="/orders" element={<Orders />} />
-          <Route path="/orders/:id" element={<OrderDetail />} />
-          <Route path="/product/:id" element={<ProductDetail />} />
-        </Routes>
-      </div>
+        {/* USER ROUTES */}
+        <Route path="/" element={<Home />} />
+        <Route path="/cart" element={<Cart />} />
+        <Route path="/orders" element={<Orders />} />
+        <Route path="/orders/:id" element={<OrderDetail />} />
+        <Route path="/product/:id" element={<ProductDetail />} />
+
+        {/* ADMIN ROUTES */}
+       <Route path="/admin" element={<AdminLayout />}>
+  <Route path="category" element={<AdminCategory />} />
+  <Route path="product" element={<AdminProduct />} /> {/* 👈 THÊM */}
+</Route>
+
+      </Routes>
     </Router>
   );
 }
