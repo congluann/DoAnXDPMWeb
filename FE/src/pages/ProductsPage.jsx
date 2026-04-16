@@ -75,7 +75,7 @@ export default function ProductsPage() {
     setLoading(true);
     setError(null);
     getProducts(filters)
-      .then(r => setProducts(r.data))
+      .then(r => setProducts(r.data.data))
       .catch(e => setError(e.message))
       .finally(() => setLoading(false));
   }, [filters]);

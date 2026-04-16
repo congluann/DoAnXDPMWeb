@@ -77,7 +77,7 @@ const NAV_COLS = [
   {
     title: "Danh mục",
     links: [
-      { to: "/products?category=smartphone", label: "Smartphones" },
+      { to: "/products?category=dien-thoai", label: "Smartphones" },
       { to: "/products?category=laptop",     label: "Laptops"     },
       { to: "/products?category=audio",      label: "Audio"       },
       { to: "/products?category=tablet",     label: "Tablets"     },

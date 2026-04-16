@@ -8,17 +8,21 @@ use App\Http\Controllers\Api\Admin\AdminDashboardController;
 use App\Http\Controllers\Api\Admin\AdminOrderController;
 use App\Http\Controllers\Api\Admin\AdminProductController;
 use App\Http\Controllers\Api\Admin\AdminUserController;
+use App\Models\Category;
 
 // ==========================================
 // PUBLIC ROUTES (Ai cũng truy cập được)
 // ==========================================
+
 Route::post('/auth/login', [AuthController::class, 'login']);
 Route::post('/auth/register', [AuthController::class, 'register']); // Nên có thêm route đăng ký
 
 Route::get('/home', [ProductController::class, 'homeData']); 
 Route::get('/products', [ProductController::class, 'index']);
 Route::get('/products/{slug}', [ProductController::class, 'show']);
-
+Route::get('/categories', function () {
+    return Category::where('is_active', 1)->get();
+});
 
 
 // ==========================================

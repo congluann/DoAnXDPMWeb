@@ -226,9 +226,9 @@ export default function ProductCard({ product }) {
       `}</style>
 
       <Link
-        to={`/products/${product.id}`}
+        to={`/products/${product.slug}`}
         aria-label={`${product.name} — ${formatPrice(product.price)}`}
-        className="pc-wrap card-interactive block"
+        className="pc-wrap card-interactive block group"
         style={{
           borderRadius: 18,
           opacity:      isOutOfStock ? 0.58 : 1,
@@ -244,7 +244,8 @@ export default function ProductCard({ product }) {
           borderRadius: "17px 17px 0 0",
         }}>
           <img
-            src={product.image} alt={product.name}
+             src={product.images?.[0]?.image_url}
+             alt={product.name}
             loading="lazy" decoding="async"
             className="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.07]"
             style={{ display:"block", width:"100%", height:"100%", objectFit:"cover",

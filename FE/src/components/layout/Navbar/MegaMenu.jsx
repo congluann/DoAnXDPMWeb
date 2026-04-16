@@ -11,7 +11,7 @@ import { CAT_ICONS, FallbackCatIcon } from "./NavbarIcons";
 
 // ⚠️ id phải khớp CHÍNH XÁC với category field trong mockProducts.js
 export const MEGA_CATS = [
-  { id: "smartphone", label: "Điện thoại",    accent: "#3B82F6" },
+  { id: "dien-thoai", label: "Điện thoại",    accent: "#3B82F6" },
   { id: "laptop",     label: "Laptop",        accent: "#8B5CF6" },
   { id: "audio",      label: "Âm thanh",      accent: "#10B981" },
   { id: "tablet",     label: "Máy tính bảng", accent: "#F59E0B" },

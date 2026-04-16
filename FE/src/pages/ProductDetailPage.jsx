@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useParams, Link } from "react-router-dom";
-import { getProductById, getProducts } from "../services/productService";
+import { getProductBySlug, getProducts } from "../services/productService";
 import { useCart } from "../context/CartContext";
 import Button from "../components/common/Button";
 import ImageGallery from "../components/product/ImageGallery";
@@ -269,7 +269,7 @@ const TRUST_BADGES = [
 
 /* ─── Main page ───────────────────────────────────────────── */
 export default function ProductDetailPage() {
-  const { id } = useParams();
+  const { slug } = useParams();
   const { addItem } = useCart();
 
   const [product,         setProduct]         = useState(null);
@@ -290,7 +290,7 @@ export default function ProductDetailPage() {
   useEffect(() => {
     setLoading(true);
     setAdded(false);
-    getProductById(id)
+    getProductBySlug(slug)
       .then(r => {
         setProduct(r.data);
         setSelectedColor(r.data.colors?.[0] || null);

@@ -2,6 +2,7 @@
  * DesktopFilters.jsx — sidebar 220px
  * Hiển thị trên md+ breakpoint.
  */
+import { useNavigate } from "react-router-dom";
 import { useCallback } from "react";
 import {
   countActiveFilters,
@@ -44,6 +45,7 @@ export default function DesktopFilters({
 
   const activeCount = countActiveFilters(filters, priceRange);
 
+  const navigate = useNavigate();
   return (
     <aside style={{ width: 220, flexShrink: 0 }}>
 
@@ -120,11 +122,22 @@ export default function DesktopFilters({
                 key={cat.id} label={cat.label}
                 active={cat.id === "all" ? !filters.category : filters.category === cat.id}
                 count={cat.count}
-                onClick={() =>
-                  cat.id === "all"
-                    ? update("category", null)
-                    : update("category", cat.id === filters.category ? null : cat.id)
-                }
+                onClick={() => {
+  const newCategory =
+    cat.id === "all"
+      ? null
+      : cat.id === filters.category
+      ? null
+      : cat.id;
+
+  update("category", newCategory);
+
+  navigate(
+    newCategory
+      ? `/products?category=${newCategory}`
+      : `/products`
+  );
+}}
               />
             ))}
           </div>

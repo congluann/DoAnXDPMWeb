@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\ProductImage;
 
 class Product extends Model
 {
@@ -31,5 +32,9 @@ class Product extends Model
     // Thiết lập mối quan hệ với Danh mục
   public function category() {
     return $this->belongsTo(Category::class, 'category_id');
+}
+public function images()
+{
+    return $this->hasMany(ProductImage::class, 'product_id');
 }
 }
