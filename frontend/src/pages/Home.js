@@ -11,7 +11,10 @@ import Footer from "../components/footer";
 function Home() {
   const [products, setProducts] = useState([]);
   const [showPopup, setShowPopup] = useState(false);
-
+  
+//   const sortedProducts = [...products].sort((a, b) => {
+//   return Number(a.price) - Number(b.price);
+// });
   useEffect(() => {
     api.get("/products")
       .then((res) => setProducts(res.data))
@@ -27,13 +30,14 @@ function Home() {
     .catch((err) => console.log(err));
   };
 
+
   return (
     <>
       {/* ADD LAYOUT */}
       <Navbar />
       <Header />
 
-      <div style={{ padding: 30 }}>
+      <div style={{ padding: 50 }}>
         <h1 style={{ textAlign: "center" }}>Product List</h1>
 
         {showPopup && (
@@ -48,14 +52,14 @@ function Home() {
             display: "flex",
             flexWrap: "wrap",
             gap: "20px",
-            justifyContent: "flex-start",
+            justifyContent: "flex-start", 
           }}
         >
           {products.map((product) => (
             <div
               key={product.product_id}
               style={{
-                width: "22%",
+                width: "23%",
                 border: "1px solid #ddd",
                 borderRadius: 10,
                 padding: 15,

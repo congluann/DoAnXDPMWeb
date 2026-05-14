@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import api from "../api";
+import api from "../../../api";
 
 function AdminCategory() {
   const [categories, setCategories] = useState([]);
@@ -50,7 +50,7 @@ const fetchCategories = () => {
 
   return (
     <div style={{ padding: 30 }}>
-      <h1>📂 Category Management</h1>
+      <h1> Category Management</h1>
 
       {/* ADD FORM */}
       <div style={{ marginBottom: 20 }}>

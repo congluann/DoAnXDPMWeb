@@ -6,32 +6,48 @@ import Cart from "./pages/Cart";
 import Orders from "./pages/Orders";
 import OrderDetail from "./pages/OrderDetail";
 import ProductDetail from "./pages/ProductDetail";
+import BlogList from "./pages/blog/BlogList";
+import BlogDetail from "./pages/blog/BlogDetail";
 
-import AdminLayout from "./pages/AdminLayout";
-import AdminCategory from "./pages/AdminCategory";
-import AdminProduct from "./pages/AdminProduct";
+
+import AdminLayout from "./pages/admin/AdminLayout";
+import AdminCategory from "./pages/admin/category/AdminCategory";
+import AdminProduct from "./pages/admin/product/AdminProduct";
+import AdminBlog from "./pages/admin/blog";
+import AdminAbout from "./pages/admin/about";
+
+
 
 
 function App() {
   return (
-    <Router>
-      <Routes>
+   <Router>
+  <Routes>
 
-        {/* USER ROUTES */}
-        <Route path="/" element={<Home />} />
-        <Route path="/cart" element={<Cart />} />
-        <Route path="/orders" element={<Orders />} />
-        <Route path="/orders/:id" element={<OrderDetail />} />
-        <Route path="/product/:id" element={<ProductDetail />} />
+    {/* USER ROUTES */}
+    <Route path="/" element={<Home />} />
+    <Route path="/cart" element={<Cart />} />
+    <Route path="/orders" element={<Orders />} />
+    <Route path="/orders/:id" element={<OrderDetail />} />
+    <Route path="/product/:id" element={<ProductDetail />} />
 
-        {/* ADMIN ROUTES */}
-       <Route path="/admin" element={<AdminLayout />}>
-  <Route path="category" element={<AdminCategory />} />
-  <Route path="product" element={<AdminProduct />} /> {/* 👈 THÊM */}
-</Route>
+    {/* BLOG USER */}
+    <Route path="/blogs" element={<BlogList />} />
+    <Route path="/blogs/:id" element={<BlogDetail />} />
 
-      </Routes>
-    </Router>
+    {/* ADMIN */}
+    <Route path="/admin" element={<AdminLayout />}>
+      <Route path="category" element={<AdminCategory />} />
+      <Route path="product" element={<AdminProduct />} />
+        <Route path="blog" element={<AdminBlog />} />
+          <Route path="about" element={<AdminAbout />} />
+
+        
+
+    </Route>
+
+  </Routes>
+</Router>
   );
 }
 

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import api from "../api";
+import api from "../../../api";
 
 function AdminProduct() {
   const [products, setProducts] = useState([]);
@@ -21,7 +21,7 @@ function AdminProduct() {
 
   return (
     <div style={{ padding: 30 }}>
-      <h1>📦 Product Management</h1>
+      <h1> Product Management</h1>
 
       <table border="1" width="100%" cellPadding="10">
         <thead>

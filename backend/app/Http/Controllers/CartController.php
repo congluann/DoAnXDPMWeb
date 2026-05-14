@@ -12,11 +12,15 @@ class CartController extends Controller
     // =========================
     // LẤY GIỎ HÀNG
     // =========================
-    public function index($user_id)
+public function index()
 {
+    $user_id = 1; // test user
+
     $cart = Cart::where('user_id', $user_id)->first();
 
-    if (!$cart) return response()->json([]);
+    if (!$cart) {
+        return response()->json([]);
+    }
 
     $items = DB::table('cart_items')
         ->join('product_variants', 'cart_items.variant_id', '=', 'product_variants.variant_id')

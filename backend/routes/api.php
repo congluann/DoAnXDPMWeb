@@ -8,6 +8,8 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProductImage;
+use App\Http\Controllers\BlogController;
+use App\Http\Controllers\AboutController;
 
 
 
@@ -48,7 +50,7 @@ use App\Http\Controllers\CartController;
 
 Route::prefix('cart')->group(function () {
 
-    Route::get('/{user_id}', [CartController::class, 'index']);   // ✅ đúng
+    Route::get('/', [CartController::class, 'index']);
     Route::post('/add', [CartController::class, 'add']);
     Route::delete('/{id}', [CartController::class, 'remove']);
     Route::put('/update', [CartController::class, 'updateQuantity']);
@@ -66,3 +68,8 @@ Route::get('/product/{id}', [ProductController::class, 'show']);
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
+Route::apiResource('blogs', BlogController::class);
+
+Route::get('/about', [AboutController::class, 'index']);
+Route::post('/about', [AboutController::class, 'store']);
+Route::put('/about/{id}', [AboutController::class, 'update']);
